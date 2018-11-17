@@ -1,0 +1,15 @@
+{
+  "name": "webgeo-hull",
+  "collaborators": [
+    "Bownairo <eerokelly@gmail.com>"
+  ],
+  "version": "0.1.0",
+  "files": [
+    "webgeo_hull_bg.wasm",
+    "webgeo_hull.js",
+    "webgeo_hull.d.ts"
+  ],
+  "module": "webgeo_hull.js",
+  "types": "webgeo_hull.d.ts",
+  "sideEffects": "false"
+}
