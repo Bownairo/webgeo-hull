@@ -1,3 +1,73 @@
+import { memory } from "webgeo-hull/webgeo_hull_bg";
+
 import * as wasm from "webgeo-hull";
 
-wasm.greet();
+// Configuration
+const HEIGHT = 1000;
+const WIDTH = 1000;
+const POINT_SIZE = 5;
+const LINE_WIDTH = 1;
+
+const BLACK = "#000000"
+const RED = "#FF0000";
+const GREEN = "#00FF00";
+const BLUE = "#0000FF";
+
+const POINT_COLOR = RED;
+
+
+// Create control button
+const control = document.getElementById("control-button");
+control.addEventListener("click", event => {
+    // Send signals to wasm
+});
+
+// Setup canvas
+const canvas = document.getElementById("webgeo-canvas");
+canvas.height = HEIGHT;
+canvas.width = WIDTH;
+
+// Draw method
+const draw = () => {
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(1, 1, WIDTH - 2,HEIGHT - 2);
+
+    // Display state of wasm
+    // Points
+
+    // Segments
+
+    // Rays
+
+    // Other
+
+    // Outline
+    ctx.beginPath();
+    ctx.fillStyle = BLACK;
+    ctx.rect(1, 1, WIDTH - 2, HEIGHT - 2);
+    ctx.stroke();
+
+    requestAnimationFrame(renderLoop);
+}
+
+// Canvas render loop
+const renderLoop = () => {
+    draw();
+};
+
+// Add event listener for click input
+canvas.addEventListener("click", event => {
+    const boundingRect = canvas.getBoundingClientRect();
+
+    const scaleX = canvas.width / boundingRect.width;
+    const scaleY = canvas.height / boundingRect.height;
+
+    const x = (event.clientX - boundingRect.left) * scaleX;
+    const y = (event.clientY - boundingRect.top) * scaleY;
+
+    // Send signals to internal wasm
+    draw();
+});
+
+// Kickoff animation
+requestAnimationFrame(renderLoop);
