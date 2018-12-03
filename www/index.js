@@ -16,6 +16,9 @@ const BLUE = "#0000FF";
 const POINT_COLOR = RED;
 
 
+// Set up wasm
+const core = wasm.Core.new();
+
 // Create control button
 const control = document.getElementById("control-button");
 control.addEventListener("click", event => {
@@ -33,6 +36,21 @@ const draw = () => {
     ctx.clearRect(1, 1, WIDTH - 2,HEIGHT - 2);
 
     // Display state of wasm
+    // Inputs
+    {
+        const len = core.input_length();
+        const x = new Int32Array(memory.buffer, core.input_points_x(), len);
+        const y = new Int32Array(memory.buffer, core.input_points_y(), len);
+        for (let i = 0; i < len; i++) {
+            ctx.beginPath();
+
+            ctx.arc(x[i], y[i], POINT_SIZE, 0, 2 * Math.PI);
+
+            ctx.fillStyle = POINT_COLOR;
+            ctx.fill();
+        }
+    }
+
     // Points
 
     // Segments
@@ -66,6 +84,7 @@ canvas.addEventListener("click", event => {
     const y = (event.clientY - boundingRect.top) * scaleY;
 
     // Send signals to internal wasm
+    core.input_add_point(x, y);
     draw();
 });
 
