@@ -137,17 +137,19 @@ const renderLoop = () => {
 
 // Add event listener for click input
 canvas.addEventListener("click", event => {
-    const boundingRect = canvas.getBoundingClientRect();
+    if (core.state() == 0) {
+        const boundingRect = canvas.getBoundingClientRect();
 
-    const scaleX = canvas.width / boundingRect.width;
-    const scaleY = canvas.height / boundingRect.height;
+        const scaleX = canvas.width / boundingRect.width;
+        const scaleY = canvas.height / boundingRect.height;
 
-    const x = (event.clientX - boundingRect.left) * scaleX;
-    const y = (event.clientY - boundingRect.top) * scaleY;
+        const x = (event.clientX - boundingRect.left) * scaleX;
+        const y = (event.clientY - boundingRect.top) * scaleY;
 
-    // Send signals to internal wasm
-    core.input_add_point(x, y);
-    draw();
+        // Send signals to internal wasm
+        core.input_add_point(x, y);
+        draw();
+    }
 });
 
 // Kickoff animation
