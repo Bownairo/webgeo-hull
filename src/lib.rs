@@ -67,12 +67,11 @@ enum Status {
 
 struct Config {
     status: Status,
-    halt: u8,
 }
 
 impl Config {
     fn new() -> Self {
-        Config { status: Status::Waiting, halt: 0 }
+        Config { status: Status::Waiting }
     }
 
     fn run(&mut self) -> bool {
@@ -102,15 +101,21 @@ impl Input {
     }
 }
 
-struct Output {
+pub struct Output {
     points: Points,
     segs: Segs,
     rays: Segs,
+    stepping: bool,
+    halt: u8,
 }
 
 impl Output {
     fn new() -> Self {
-        Output { points: Points::new(), segs: Segs::new(), rays: Segs::new() }
+        Output { points: Points::new(), segs: Segs::new(), rays: Segs::new(), stepping: false, halt: 0 }
+    }
+
+    fn stepping(&self) -> bool {
+        self.stepping
     }
 }
 
@@ -180,7 +185,7 @@ impl Core {
     }
 
     pub fn halt(&self) -> *const u8 {
-        &self.config.halt
+        &self.output.halt
     }
 
     pub fn state(&self) -> u8 {
@@ -195,7 +200,8 @@ impl Core {
         if self.config.run() {
             let mut points = Vec::new();
             self.input.points.x.iter().enumerate().for_each(|x| points.push((*x.1, self.input.points.y[x.0])));
-            good::run(points).last().unwrap().0;
+            // XXX Break output into it's own thing, then use output in good.
+            good::run(points, &mut self.output);
             self.config.end();
         }
     }
