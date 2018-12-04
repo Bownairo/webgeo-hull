@@ -21,8 +21,17 @@ const core = wasm.Core.new();
 
 // Create control button
 const control = document.getElementById("control-button");
+const halt = new Uint8Array(memory.buffer, core.halt(), 1);
 control.addEventListener("click", event => {
     // Send signals to wasm
+    // If I can't start
+    if (!core.start()) {
+        console.log(halt[0]);
+        // If halted, continue
+        if (halt[0] == 1) {
+            halt[0] = 1;
+        }
+    }
 });
 
 // Setup canvas
