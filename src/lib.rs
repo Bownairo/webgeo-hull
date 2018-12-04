@@ -75,13 +75,19 @@ impl Config {
         Config { status: Status::Waiting, halt: 0 }
     }
 
-    fn running(&mut self) -> bool {
+    fn run(&mut self) -> bool {
         if let Status::Waiting = self.status {
             self.status = Status::Running;
             true
         }
         else {
             false
+        }
+    }
+
+    fn end(&mut self) {
+        if let Status::Running = self.status {
+            self.status = Status::Done;
         }
     }
 }
@@ -177,15 +183,20 @@ impl Core {
         &self.config.halt
     }
 
-    pub fn start(&mut self) -> bool {
-        if self.config.running() {
+    pub fn state(&self) -> u8 {
+        match self.config.status {
+            Status::Waiting => 0,
+            Status::Running => 1,
+            Status::Done => 2,
+        }
+    }
+
+    pub fn start(&mut self) {
+        if self.config.run() {
             let mut points = Vec::new();
             self.input.points.x.iter().enumerate().for_each(|x| points.push((*x.1, self.input.points.y[x.0])));
             good::run(points).last().unwrap().0;
-            true
-        }
-        else {
-            false
+            self.config.end();
         }
     }
 }

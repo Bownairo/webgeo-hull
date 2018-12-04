@@ -25,13 +25,20 @@ const control = document.getElementById("control-button");
 const halt = new Uint8Array(memory.buffer, core.halt(), 1);
 control.addEventListener("click", event => {
     // Send signals to wasm
-    // If I can't start
-    if (!core.start()) {
-        console.log(halt[0]);
-        // If halted, continue
-        if (halt[0] == 1) {
-            halt[0] = 1;
-        }
+    switch (core.state()) {
+        case 0: // Waiting
+            core.start();
+            // XXX Change button text
+        break;
+        case 1: // Running
+            // If halted, continue
+            if (halt[0] == 1) {
+                halt[0] = 1;
+            }
+        break;
+        case 2: // Done
+
+        break;
     }
 });
 
@@ -46,9 +53,8 @@ const draw = () => {
     ctx.clearRect(1, 1, WIDTH - 2,HEIGHT - 2);
 
     // Display state of wasm
-    // XXX Conditionally draw each of these
     // Inputs
-    {
+    if (core.state() == 0) {
         const len = core.input_length();
         const x = new Int32Array(memory.buffer, core.input_points_x(), len);
         const y = new Int32Array(memory.buffer, core.input_points_y(), len);
@@ -62,6 +68,7 @@ const draw = () => {
         }
     }
 
+    // XXX Conditionally draw each of these
     // Points
     {
         const len = core.points_length();
