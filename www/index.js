@@ -35,13 +35,59 @@ control.addEventListener("click", event => {
             draw();
             if (core.state() == 2) {
                 control.innerText = "Restart";
+                control.disabled = false;
+                skip.disabled = true;
+                auto.disabled = true;
             }
         break;
         case 2: // Done
-            control.innerText = "Start";
             core = wasm.Core.new();
             draw();
+            control.innerText = "Start";
+            skip.disabled = false;
+            auto.disabled = false;
         break;
+    }
+});
+
+// Create skip button
+const skip = document.getElementById("skip-button");
+skip.addEventListener("click", event => {
+    if (core.state() == 0) {
+        core.start();
+    }
+    if (core.state() != 2) {
+        core.complete();
+        draw();
+        control.innerText = "Restart";
+        control.disabled = false;
+        skip.disabled = true;
+        auto.disabled = true;
+    }
+});
+
+// Create auto button
+const auto = document.getElementById("auto-button");
+auto.addEventListener("click", event => {
+    if (core.state() == 0) {
+        core.start();
+    }
+    if (core.state() != 2) {
+        (function loop () {
+            setTimeout(function () {
+                core.step();
+                draw();
+                if (core.state() == 1) {
+                    loop();
+                }
+                else {
+                    control.disabled = false;
+                    control.innerText = "Restart";
+                }
+            }, 1000)
+        })();
+        control.disabled = true;
+        auto.disabled = true;
     }
 });
 

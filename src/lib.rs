@@ -137,7 +137,6 @@ impl Core {
     pub fn start(&mut self) {
         if self.config.run() {
             let points = self.input.points.condense();
-            // XXX Break output into it's own thing, then use output in good.
             good::run(points, &mut self.output);
         }
     }
@@ -147,5 +146,10 @@ impl Core {
         if self.output.done() {
             self.config.end();
         }
+    }
+
+    pub fn complete(&mut self) {
+        self.output.complete();
+        self.config.end();
     }
 }
