@@ -71,7 +71,6 @@ const draw = () => {
         }
     }
 
-    // XXX Conditionally draw each of these
     // Points
     {
         var len = core.points_length();
@@ -112,9 +111,9 @@ const draw = () => {
         for (let i = 0; i < len; i++) {
             ctx.beginPath();
 
+            let out = extend(0, 0, WIDTH, HEIGHT, x[i * 2], y[i * 2], x[(i * 2) + 1], y[(i * 2) + 1]);
             ctx.moveTo(x[i * 2], y[i * 2]);
-            // XXX Where boundary and line intersect towards this point
-            ctx.lineTo(x[(i * 2) + 1], y[(i * 2) + 1]);
+            ctx.lineTo(out[0], out[1]);
 
             ctx.lineWidth = LINE_WIDTH;
             ctx.strokeStyle = RAY_COLOR;
@@ -147,6 +146,42 @@ canvas.addEventListener("click", event => {
         draw();
     }
 });
+
+// Helper to extend rays
+const extend = (xmin, ymin, xmax, ymax, x1, y1, x2, y2) => {
+    if (x2 == x1) {
+        if (y2 > y1) {
+            return [x2, ymax];
+        }
+        else {
+            return [x1, ymin];
+        }
+    }
+
+    let slope = (y2 - y1) / (x2 - x1);
+    let b = y1 - slope * x1;
+
+    let left_y = slope * xmin + b;
+    let right_y = slope * xmax + b;
+    let bottom_x = (ymin - b) / slope;
+    let top_x = (ymax - b) / slope;
+
+    if ((ymin <= left_y) && (left_y <= ymax) && (x2 < x1)) {
+        return [xmin, left_y];
+    }
+
+    if ((ymin <= right_y) && (right_y <= ymax) && (x2 > x1)) {
+        return [xmax, right_y];
+    }
+
+    if ((xmin <= bottom_x) && (bottom_x <= xmax) && (y2 < y1)) {
+        return [bottom_x, ymin];
+    }
+
+    if ((xmin <= top_x) && (top_x <= xmax) && (y2 > y1)) {
+        return [top_x, ymax];
+    }
+}
 
 // Draw board
 draw();
