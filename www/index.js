@@ -3,6 +3,7 @@ import { memory } from "webgeo-hull/webgeo_hull_bg";
 import * as wasm from "webgeo-hull";
 
 // Configuration
+const STEP_DELAY = 250;
 const HEIGHT = 1000;
 const WIDTH = 1000;
 const POINT_SIZE = 5;
@@ -84,7 +85,7 @@ auto.addEventListener("click", event => {
                     control.disabled = false;
                     control.innerText = "Restart";
                 }
-            }, 1000)
+            }, STEP_DELAY)
         })();
         control.disabled = true;
         auto.disabled = true;
