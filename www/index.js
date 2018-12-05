@@ -22,7 +22,6 @@ var core = wasm.Core.new();
 
 // Create control button
 const control = document.getElementById("control-button");
-const halt = new Uint8Array(memory.buffer, core.halt(), 1);
 control.addEventListener("click", event => {
     // Send signals to wasm
     switch (core.state()) {
@@ -31,10 +30,7 @@ control.addEventListener("click", event => {
             // XXX Change button text
         break;
         case 1: // Running
-            // If halted, continue
-            if (halt[0] == 1) {
-                halt[0] = 1;
-            }
+            core.step();
         break;
         case 2: // Done
 

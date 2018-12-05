@@ -126,10 +126,6 @@ impl Core {
         self.output.rays_y()
     }
 
-    pub fn halt(&self) -> *const u8 {
-        self.output.halt()
-    }
-
     pub fn state(&self) -> u8 {
         match self.config.status {
             Status::Waiting => 0,
@@ -140,9 +136,15 @@ impl Core {
 
     pub fn start(&mut self) {
         if self.config.run() {
-            let mut points = self.input.points.condense();
+            let points = self.input.points.condense();
             // XXX Break output into it's own thing, then use output in good.
             good::run(points, &mut self.output);
+        }
+    }
+
+    pub fn step(&mut self) {
+        self.output.step();
+        if self.output.done() {
             self.config.end();
         }
     }
