@@ -83,6 +83,7 @@ auto.addEventListener("click", event => {
                 }
                 else {
                     control.disabled = false;
+                    skip.disabled = true;
                     control.innerText = "Restart";
                 }
             }, STEP_DELAY)
