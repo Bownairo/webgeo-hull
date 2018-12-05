@@ -18,7 +18,7 @@ const LINE_COLOR = "#000000";
 
 
 // Set up wasm
-const core = wasm.Core.new();
+var core = wasm.Core.new();
 
 // Create control button
 const control = document.getElementById("control-button");
@@ -55,9 +55,9 @@ const draw = () => {
     // Display state of wasm
     // Inputs
     if (core.state() == 0) {
-        const len = core.input_length();
-        const x = new Int32Array(memory.buffer, core.input_points_x(), len);
-        const y = new Int32Array(memory.buffer, core.input_points_y(), len);
+        var len = core.input_length();
+        var x = new Int32Array(memory.buffer, core.input_points_x(), len);
+        var y = new Int32Array(memory.buffer, core.input_points_y(), len);
         for (let i = 0; i < len; i++) {
             ctx.beginPath();
 
@@ -71,9 +71,9 @@ const draw = () => {
     // XXX Conditionally draw each of these
     // Points
     {
-        const len = core.points_length();
-        const x = new Int32Array(memory.buffer, core.points_x(), len);
-        const y = new Int32Array(memory.buffer, core.points_y(), len);
+        var len = core.points_length();
+        var x = new Int32Array(memory.buffer, core.points_x(), len);
+        var y = new Int32Array(memory.buffer, core.points_y(), len);
         for (let i = 0; i < len; i++) {
             ctx.beginPath();
 
@@ -86,14 +86,14 @@ const draw = () => {
 
     // Segments
     {
-        const len = core.segs_length();
-        const x = new Int32Array(memory.buffer, core.segs_x(), len * 2);
-        const y = new Int32Array(memory.buffer, core.segs_y(), len * 2);
-        for (let i = 0; i < len; i += 2) {
+        var len = core.segs_length();
+        var x = new Int32Array(memory.buffer, core.segs_x(), len * 2);
+        var y = new Int32Array(memory.buffer, core.segs_y(), len * 2);
+        for (let i = 0; i < len; i++) {
             ctx.beginPath();
 
-            ctx.moveTo(x[i], y[i]);
-            ctx.lineTo(x[i + 1], y[i + 1]);
+            ctx.moveTo(x[i * 2], y[i * 2]);
+            ctx.lineTo(x[(i * 2) + 1], y[(i * 2) + 1]);
 
             ctx.lineWidth = LINE_WIDTH;
             ctx.strokeStyle = LINE_COLOR;
@@ -103,15 +103,15 @@ const draw = () => {
 
     // Rays
     {
-        const len = core.rays_length();
-        const x = new Int32Array(memory.buffer, core.rays_x(), len * 2);
-        const y = new Int32Array(memory.buffer, core.rays_y(), len * 2);
-        for (let i = 0; i < len; i += 2) {
+        var len = core.rays_length();
+        var x = new Int32Array(memory.buffer, core.rays_x(), len * 2);
+        var y = new Int32Array(memory.buffer, core.rays_y(), len * 2);
+        for (let i = 0; i < len; i++) {
             ctx.beginPath();
 
-            ctx.moveTo(x[i], y[i]);
+            ctx.moveTo(x[i * 2], y[i * 2]);
             // XXX Where boundary and line intersect towards this point
-            ctx.lineTo(x[i + 1], y[i + 1]);
+            ctx.lineTo(x[(i * 2) + 1], y[(i * 2) + 1]);
 
             ctx.lineWidth = LINE_WIDTH;
             ctx.strokeStyle = LINE_COLOR;
