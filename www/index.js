@@ -14,9 +14,9 @@ const RED = "#FF0000";
 const GREEN = "#00FF00";
 const BLUE = "#0000FF";
 
-const POINT_COLOR = RED;
-const SEG_COLOR = "#000000";
-const RAY_COLOR = "#FF0000";
+const POINT_COLOR = BLUE;
+const SEG_COLOR = BLACK;
+const RAY_COLOR = GREEN;
 
 
 // Set up wasm
@@ -118,21 +118,6 @@ const draw = () => {
         }
     }
 
-    // Points
-    {
-        var len = core.points_length();
-        var x = new Int32Array(memory.buffer, core.points_x(), len);
-        var y = new Int32Array(memory.buffer, core.points_y(), len);
-        for (let i = 0; i < len; i++) {
-            ctx.beginPath();
-
-            ctx.arc(x[i], y[i], POINT_SIZE, 0, 2 * Math.PI);
-
-            ctx.fillStyle = POINT_COLOR;
-            ctx.fill();
-        }
-    }
-
     // Segments
     {
         var len = core.segs_length();
@@ -165,6 +150,21 @@ const draw = () => {
             ctx.lineWidth = LINE_WIDTH;
             ctx.strokeStyle = RAY_COLOR;
             ctx.stroke();
+        }
+    }
+
+    // Points
+    {
+        var len = core.points_length();
+        var x = new Int32Array(memory.buffer, core.points_x(), len);
+        var y = new Int32Array(memory.buffer, core.points_y(), len);
+        for (let i = 0; i < len; i++) {
+            ctx.beginPath();
+
+            ctx.arc(x[i], y[i], POINT_SIZE, 0, 2 * Math.PI);
+
+            ctx.fillStyle = POINT_COLOR;
+            ctx.fill();
         }
     }
 
