@@ -14,7 +14,8 @@ const GREEN = "#00FF00";
 const BLUE = "#0000FF";
 
 const POINT_COLOR = RED;
-const LINE_COLOR = "#000000";
+const SEG_COLOR = "#000000";
+const RAY_COLOR = "#FF0000";
 
 
 // Set up wasm
@@ -31,6 +32,7 @@ control.addEventListener("click", event => {
         break;
         case 1: // Running
             core.step();
+            draw();
         break;
         case 2: // Done
 
@@ -92,7 +94,7 @@ const draw = () => {
             ctx.lineTo(x[(i * 2) + 1], y[(i * 2) + 1]);
 
             ctx.lineWidth = LINE_WIDTH;
-            ctx.strokeStyle = LINE_COLOR;
+            ctx.strokeStyle = SEG_COLOR;
             ctx.stroke();
         }
     }
@@ -110,7 +112,7 @@ const draw = () => {
             ctx.lineTo(x[(i * 2) + 1], y[(i * 2) + 1]);
 
             ctx.lineWidth = LINE_WIDTH;
-            ctx.strokeStyle = LINE_COLOR;
+            ctx.strokeStyle = RAY_COLOR;
             ctx.stroke();
         }
     }
@@ -119,17 +121,10 @@ const draw = () => {
 
     // Outline
     ctx.beginPath();
-    ctx.fillStyle = BLACK;
+    ctx.strokeStyle = BLACK;
     ctx.rect(1, 1, WIDTH - 2, HEIGHT - 2);
     ctx.stroke();
-
-    requestAnimationFrame(renderLoop);
 }
-
-// Canvas render loop
-const renderLoop = () => {
-    draw();
-};
 
 // Add event listener for click input
 canvas.addEventListener("click", event => {
@@ -148,5 +143,5 @@ canvas.addEventListener("click", event => {
     }
 });
 
-// Kickoff animation
-requestAnimationFrame(renderLoop);
+// Draw board
+draw();
