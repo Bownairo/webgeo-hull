@@ -91,39 +91,39 @@ impl Core {
     }
 
     pub fn points_length(&self) -> u32 {
-        self.output.points.len()
+        self.output.points_len()
     }
 
     pub fn points_x(&self) -> *const i32 {
-        self.output.points.x()
+        self.output.points_x()
     }
 
     pub fn points_y(&self) -> *const i32 {
-        self.output.points.y()
+        self.output.points_y()
     }
 
     pub fn segs_length(&self) -> u32 {
-        self.output.segs.len()
+        self.output.segs_len()
     }
 
     pub fn segs_x(&self) -> *const i32 {
-        self.output.segs.x()
+        self.output.segs_x()
     }
 
     pub fn segs_y(&self) -> *const i32 {
-        self.output.segs.y()
+        self.output.segs_y()
     }
 
     pub fn rays_length(&self) -> u32 {
-        self.output.rays.len()
+        self.output.rays_len()
     }
 
     pub fn rays_x(&self) -> *const i32 {
-        self.output.rays.x()
+        self.output.rays_x()
     }
 
     pub fn rays_y(&self) -> *const i32 {
-        self.output.rays.y()
+        self.output.rays_y()
     }
 
     pub fn halt(&self) -> *const u8 {
