@@ -6,7 +6,7 @@ import * as wasm from "webgeo-hull";
 const HEIGHT = 1000;
 const WIDTH = 1000;
 const POINT_SIZE = 5;
-const LINE_WIDTH = 1;
+const LINE_WIDTH = 2;
 
 const BLACK = "#000000"
 const RED = "#FF0000";
@@ -28,14 +28,19 @@ control.addEventListener("click", event => {
     switch (core.state()) {
         case 0: // Waiting
             core.start();
-            // XXX Change button text
+            control.innerText = "Step";
         break;
         case 1: // Running
             core.step();
             draw();
+            if (core.state() == 2) {
+                control.innerText = "Restart";
+            }
         break;
         case 2: // Done
-
+            control.innerText = "Start";
+            core = wasm.Core.new();
+            draw();
         break;
     }
 });
